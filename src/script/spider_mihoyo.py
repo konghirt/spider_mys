@@ -25,7 +25,7 @@ def data_spider(game, search_type, scroll_count):
         # 配置打开的浏览器(需事先启动用于调试的浏览器)
         chrome_options = Options()
         # chrome_options.add_argument("--user-data-dir="+r"C:/Users/Administrator/AppData/Local/Google/Chrome/User Data")
-        chrome_options.add_experimental_option('debuggerAddress', "127.0.0.1:9222")
+        # chrome_options.add_experimental_option('debuggerAddress', "127.0.0.1:9222")
         
         browser = webdriver.Chrome(chrome_options=chrome_options)
         
