@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt5.QtCore import pyqtSlot
 from datetime import datetime
 import time
+import requests
 import re
 from views.MainWindow import Ui_MainWindow
 from utils.mihoyoEnum import *
@@ -14,10 +15,10 @@ class MainWin(QMainWindow, Ui_MainWindow):
     # 初始化界面
     def __init__(self):
 
-        self.spider_plate = ''
-        self.spider_type = ''
-        self.start_num = 1
-        self.scroll_count = 0
+        self.spider_plate = ''  # 板块
+        self.spider_type = ''  # 类型
+        self.start_num = 1  # 开始张数
+        self.scroll_count = 0  # 滚动次数
 
         super(MainWin, self).__init__()
         self.setupUi(self)
@@ -49,37 +50,45 @@ class MainWin(QMainWindow, Ui_MainWindow):
     def log(self, str):
         self.textEdit.append(str)
         QApplication.processEvents()  # 刷新界面
+    
 
+    # 批量下载
+    def download(self, data_list):
+        desk = 'C:/Users/Administrator/Desktop/img/' + datetime.now().strftime('%Y-%m-%d %H%M')
+        if not os.path.isdir(desk):
+            os.makedirs(desk)
 
-    # 执行
-    def confirm(self):
-        # str = f'{self.spider_plate} {self.spider_type} {self.start_num} {self.scroll_count}'
-        self.log('打开浏览器...')
-        self.log('浏览器打开成功...')
-        self.log('开始爬取...')
-        data_list = spider_mihoyo.data_spider(self.spider_plate, self.spider_type, self.start_num, self.scroll_count)
-        self.log('爬取完成，开始下载...')
-        
-        # desk = 'C:/Users/Administrator/Desktop/img/' + datetime.now().strftime('%Y-%m-%d %H%M')
-        # if not os.path.isdir(desk):
-        #     os.makedirs(desk)
         count = 0
         for i, data in enumerate(data_list):
+            if i < self.start_num:
+                continue
             try:
                 img = data['src'].partition('?')[0]
                 suffix = re.findall(r'(.jpg|.jpeg|.png|.gif)$', img)[-1]
-                # file = f'{desk}/{i + 1}{suffix}'
+                file = f'{desk}/{count + 1}{suffix}'
                 self.log(f'下载 {img} ...')
-                count = count + 1
-                # with open(file, 'wb') as f:
-                #     f.write(requests.get(img).content)
+                with open(file, 'wb') as f:
+                    self.log(f'下载 {img} ...')
+                    f.write(requests.get(img).content)
+                    count = count + 1
+                
                 time.sleep(0.5)
+
             except Exception:
                 self.log(f'下载失败, {img}')
 
         self.log(f'下载完成, 共下载{count}张图片')
 
+    # 执行
+    def confirm(self):
+        # str = f'{self.spider_plate} {self.spider_type} {self.start_num} {self.scroll_count}'
+        self.log('开始爬取...')
+        data_list = spider_mihoyo.data_spider(self.spider_plate, self.spider_type, self.scroll_count)
+        self.log('爬取完成，开始下载...')
+        self.download(data_list)
 
+
+    # 初始化数据
     def init_data(self):
         self.spinBox_start()
         self.spinBox_count()

@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import time
 
 # 配置打开的浏览器(需事先启动用于调试的浏览器)
-# dos命令 端口号|配置信息路径 chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\selenum\automationProfile"
+# dos命令 端口号|配置信息路径 chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\selenium\automationProfile"
 chrome_options = Options()
 chrome_options.add_experimental_option('debuggerAddress', "127.0.0.1:9222")
 browser = webdriver.Chrome(chrome_options=chrome_options)

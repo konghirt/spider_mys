@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(640, 420)
+        MainWindow.setFixedSize(640, 420)
         MainWindow.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -155,5 +155,3 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "    滚动次数"))
         self.label_5.setText(_translate("MainWindow", "从第几张开始"))
-        self.action2.setText(_translate("MainWindow", "test"))
-        self.action1.setText(_translate("MainWindow", "1"))
