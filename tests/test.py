@@ -203,3 +203,8 @@ import re
 
 str = 'https://i0.hdslb.com/bfs/album/f6bfea5528fd49a52f7d189f464dcd4f896786bd.jpg'
 re.findall(r'(.jpg|.png)$', str)[-1]
+
+#%%
+import os 
+cur_path = os.path.abspath(os.path.dirname(__file__)).split('tests')[0]
+cur_path

@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt5.QtWidgets import QApplication
 from views.MyWin import MainWin
 
 if __name__ == "__main__":

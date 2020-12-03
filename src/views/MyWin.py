@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
 from PyQt5.QtCore import pyqtSlot
 from datetime import datetime
 import time
@@ -19,6 +19,7 @@ class MainWin(QMainWindow, Ui_MainWindow):
         self.spider_type = ''  # 类型
         self.start_num = 1  # 开始张数
         self.scroll_count = 0  # 滚动次数
+        self.cwd = os.getcwd() # 获取当前程序文件位置
 
         super(MainWin, self).__init__()
         self.setupUi(self)
@@ -44,33 +45,37 @@ class MainWin(QMainWindow, Ui_MainWindow):
         self.countSpinBox.valueChanged.connect(self.spinBox_count)
 
         self.pushButton.clicked.connect(self.confirm)
+        self.chooseFileBtn.clicked.connect(self.choose_dir)
 
-    
-    # 在文本框打印
-    def log(self, str):
-        self.textEdit.append(str)
-        QApplication.processEvents()  # 刷新界面
+
+    # 执行
+    def confirm(self):
+        # str = f'{self.spider_plate} {self.spider_type} {self.start_num} {self.scroll_count}'
+        self.log('开始爬取...')
+        data_list = spider_mihoyo.data_spider(self.spider_plate, self.spider_type, self.scroll_count)
+
+        self.log('爬取完成，开始下载...')
+        desk = self.create_dir()
+        self.download(data_list, desk)
     
 
     # 批量下载
-    def download(self, data_list):
-        desk = 'C:/Users/Administrator/Desktop/img/' + datetime.now().strftime('%Y-%m-%d %H%M')
-        if not os.path.isdir(desk):
-            os.makedirs(desk)
+    def download(self, data_list, desk):
 
         count = 0
         for i, data in enumerate(data_list):
-            if i < self.start_num:
+
+            if i < self.start_num - 1:
                 continue
             try:
                 img = data['src'].partition('?')[0]
                 suffix = re.findall(r'(.jpg|.jpeg|.png|.gif)$', img)[-1]
                 file = f'{desk}/{count + 1}{suffix}'
-                self.log(f'下载 {img} ...')
-                with open(file, 'wb') as f:
-                    self.log(f'下载 {img} ...')
-                    f.write(requests.get(img).content)
-                    count = count + 1
+                # self.log(f'下载 {img} ...')
+                # with open(file, 'wb') as f:
+                #     self.log(f'下载 {img} ...')
+                #     f.write(requests.get(img).content)
+                #     count = count + 1
                 
                 time.sleep(0.5)
 
@@ -79,13 +84,27 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
         self.log(f'下载完成, 共下载{count}张图片')
 
-    # 执行
-    def confirm(self):
-        # str = f'{self.spider_plate} {self.spider_type} {self.start_num} {self.scroll_count}'
-        self.log('开始爬取...')
-        data_list = spider_mihoyo.data_spider(self.spider_plate, self.spider_type, self.scroll_count)
-        self.log('爬取完成，开始下载...')
-        self.download(data_list)
+
+    # 选择目录
+    def choose_dir(self):
+        dir_choose = QFileDialog.getExistingDirectory(self, "选取文件夹", self.cwd) # 起始路径
+
+        if dir_choose == "":
+            return
+
+        self.saveEditText.setText(dir_choose)
+
+
+    # 创建目录
+    def create_dir(self):
+        
+        desk = self.saveEditText.text()
+
+        self.log(desk)
+        if not os.path.isdir(desk):
+            os.makedirs(desk)
+        
+        return desk
 
 
     # 初始化数据
@@ -123,6 +142,7 @@ class MainWin(QMainWindow, Ui_MainWindow):
         elif self.plateBtn4.isChecked():
             self.spider_plate = GameType.DBY.value
 
+
     # 类型事件
     def type_checked(self):
 
@@ -137,3 +157,9 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
         elif self.typeBtn4.isChecked():
             self.spider_type = SearchType.GOOD.value
+
+
+    # 在文本框打印
+    def log(self, str):
+        self.textEdit.append(str)
+        QApplication.processEvents()  # 刷新界面
