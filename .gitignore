@@ -2,5 +2,5 @@ __pycache__
 .history
 .vscode
 build/
-dist/
+dist
 debug.log

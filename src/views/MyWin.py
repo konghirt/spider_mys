@@ -71,11 +71,11 @@ class MainWin(QMainWindow, Ui_MainWindow):
                 img = data['src'].partition('?')[0]
                 suffix = re.findall(r'(.jpg|.jpeg|.png|.gif)$', img)[-1]
                 file = f'{desk}/{count + 1}{suffix}'
-                # self.log(f'下载 {img} ...')
-                # with open(file, 'wb') as f:
-                #     self.log(f'下载 {img} ...')
-                #     f.write(requests.get(img).content)
-                #     count = count + 1
+
+                with open(file, 'wb') as f:
+                    self.log(f'下载 {img} ...')
+                    f.write(requests.get(img).content)
+                    count = count + 1
                 
                 time.sleep(0.5)
 
@@ -100,7 +100,6 @@ class MainWin(QMainWindow, Ui_MainWindow):
         
         desk = self.saveEditText.text()
 
-        self.log(desk)
         if not os.path.isdir(desk):
             os.makedirs(desk)
         
