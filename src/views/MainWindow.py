@@ -150,7 +150,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "spider"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "图片爬取"))
         self.clearBtn.setText(_translate("MainWindow", "清空"))
         self.pushButton.setText(_translate("MainWindow", "执行"))
         self.label_5.setText(_translate("MainWindow", "从第几张开始"))
