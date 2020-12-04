@@ -18,35 +18,47 @@ import re
 from datetime import datetime
 # import sys
 
+class SpiderMihoyo:
+    
+    def __init__(self):
+        self.browser = ''
 
-def data_spider(game, search_type, scroll_count):
+    
+    def start(self):
+        try:
+            chrome_options = Options()
+            # 配置打开的浏览器(需事先启动用于调试的浏览器)
+            # chrome_options.add_argument("--user-data-dir="+r"C:/Users/Administrator/AppData/Local/Google/Chrome/User Data")
+            # chrome_options.add_experimental_option('debuggerAddress', "127.0.0.1:9222")
+            
+            self.browser = webdriver.Chrome(chrome_options=chrome_options)
+            
+        except Exception:
+            print('浏览器打开失败')
 
-    try:
-        chrome_options = Options()
-        # 配置打开的浏览器(需事先启动用于调试的浏览器)
-        # chrome_options.add_argument("--user-data-dir="+r"C:/Users/Administrator/AppData/Local/Google/Chrome/User Data")
-        # chrome_options.add_experimental_option('debuggerAddress', "127.0.0.1:9222")
-        
-        browser = webdriver.Chrome(chrome_options=chrome_options)
-        
-    except Exception:
-        print('浏览器打开失败')
+    def data_spider(self, game, search_type, scroll_count):
 
-    url = f'{game}?type={search_type}'
-    # print(url)
-    browser.get(url)
-    time.sleep(1)
+        url = f'{game}?type={search_type}'
+        # print(url)
+        self.browser.get(url)
+        time.sleep(1)
 
-    for index in range(scroll_count):
-        browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
-        time.sleep(3)
+        for index in range(scroll_count):
+            self.browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+            time.sleep(3)
 
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
-    # console.prettify(soup)
+        soup = BeautifulSoup(self.browser.page_source, 'html.parser')
+        # console.prettify(soup)
 
-    img_card = soup.select('.mhy-img-article-card .mhy-img-article-card__img img')
+        img_card = soup.select('.mhy-img-article-card .mhy-img-article-card__img img')
 
-    return img_card
+        return img_card
+
+
+    # 退出
+    def quit(self):
+        if self.browser:
+            self.browser.quit()
 
 
 # def download(data_list):

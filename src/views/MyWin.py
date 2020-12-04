@@ -8,7 +8,7 @@ import requests
 import re
 from views.MainWindow import Ui_MainWindow
 from utils.mihoyoEnum import *
-from script import spider_mihoyo
+from script.spider_mihoyo import SpiderMihoyo
 
 class MainWin(QMainWindow, Ui_MainWindow):
     
@@ -20,6 +20,8 @@ class MainWin(QMainWindow, Ui_MainWindow):
         self.start_num = 1  # 开始张数
         self.scroll_count = 0  # 滚动次数
         self.cwd = os.getcwd() # 获取当前程序文件位置
+
+        self.spider = SpiderMihoyo()  # 爬取类实例
 
         super(MainWin, self).__init__()
         self.setupUi(self)
@@ -50,10 +52,12 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
     # 执行
     def confirm(self):
-        # str = f'{self.spider_plate} {self.spider_type} {self.start_num} {self.scroll_count}'
-        self.log('开始爬取...')
-        data_list = spider_mihoyo.data_spider(self.spider_plate, self.spider_type, self.scroll_count)
 
+        # 启动网页
+        self.log('打开浏览器...')
+        self.spider.start()
+        self.log('开始爬取...')
+        data_list = self.spider.data_spider(self.spider_plate, self.spider_type, self.scroll_count)
         self.log('爬取完成，开始下载...')
         desk = self.create_dir()
         self.download(data_list, desk)
@@ -64,7 +68,7 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
         count = 0
         for i, data in enumerate(data_list):
-
+            print(data)
             if i < self.start_num - 1:
                 continue
             try:
@@ -162,3 +166,7 @@ class MainWin(QMainWindow, Ui_MainWindow):
     def log(self, str):
         self.textEdit.append(str)
         QApplication.processEvents()  # 刷新界面
+
+    # 窗口关闭事件
+    def closeEvent(self,e):
+       self.spider.quit()
