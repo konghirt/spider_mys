@@ -4,8 +4,8 @@ Description  : 爬取米游社同人图
 Author       : twips
 Date         : 2020-11-21 10:52:35
 LastEditors  : twips
-LastEditTime : 2020-12-02 10:25:00
-FilePath     : \\flask_test\\src\\spider_mihoyo.py
+LastEditTime : 2020-12-05 15:14:20
+FilePath     : \\spider_mys\\src\\script\\spider_mihoyo.py
 '''
 
 import os
@@ -17,7 +17,7 @@ import time
 import re
 from datetime import datetime
 # import sys
-
+ 
 class SpiderMihoyo:
     
     def __init__(self):
@@ -57,8 +57,7 @@ class SpiderMihoyo:
 
     # 退出
     def quit(self):
-        if self.browser:
-            self.browser.quit()
+         self.browser and self.browser.quit()
 
 
 # def download(data_list):

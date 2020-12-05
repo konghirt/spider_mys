@@ -68,7 +68,7 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
         count = 0
         for i, data in enumerate(data_list):
-            print(data)
+
             if i < self.start_num - 1:
                 continue
             try:
