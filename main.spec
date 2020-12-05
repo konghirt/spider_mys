@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['src\\main.py', 'src\\script\\spider_mihoyo.py', 'src\\utils\\mihoyoEnum.py', 'src\\views\\MainWindow.py', 'src\\views\\MyWin.py'],
+a = Analysis(['spider_selenium\\main.py', 'spider_selenium\\script\\spider_mihoyo.py', 'spider_selenium\\utils\\mihoyoEnum.py', 'spider_selenium\\views\\MainWindow.py', 'spider_selenium\\views\\MyWin.py'],
              pathex=['D:\\workspace\\python\\spider_mys'],
              binaries=[],
              datas=[],
